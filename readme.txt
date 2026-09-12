@@ -1,39 +1,55 @@
-# Agentic Incident Resolution System
+# 🤖 AI-Powered Distributed Incident Detection & Auto-Resolution Platform
 
-## Problem Statement
-Modern distributed systems generate massive logs. Detecting incidents,
-analyzing root causes, and suggesting remediation is slow and manual.
+An event-driven, AI-powered incident management platform built with **Java, Spring Boot, Apache Kafka, Spring AI, and Ollama**.
 
-This system detects incidents from logs, builds structured incident context,
-and uses agent-based reasoning (optionally AI-powered) to suggest fixes.
+The system simulates application logs, processes them through a distributed Kafka pipeline, analyzes incidents using a locally running LLM, and persists detected incidents for further investigation and automated remediation.
 
-## Design Principles
-- AI is optional and replaceable
-- System functions without cloud dependencies
-- Event-driven and loosely coupled
-- Optimized for local development
+> 🚧 **Project Status:** Actively under development  
+> Current implementation: Kafka-based distributed processing + AI-powered incident analysis  
+> Planned: RAG, automated remediation, verification loops, observability, and production-style deployment.
 
-## MVP Scope (Phase 1)
-- Log generation
-- Log ingestion
-- Rule-based incident detection
+---
 
-## Tech Stack
-- Java 17
-- Spring Boot
-- REST APIs
-- File / in-memory storage (initial)
+## 🏗️ Architecture
 
-##Final microservice flow now
-
-POST /logs/generate
-      ↓
-Kafka logs-topic
-      ↓
-LogIngestionController
-      ↓
-Kafka incident-topic
-      ↓
-IncidentDetectionController
-      ↓
-AI Analysis
+                    ┌──────────────────────┐
+                    │   Log Generator      │
+                    │   Spring Boot        │
+                    │   :8081              │
+                    └──────────┬───────────┘
+                               │
+                               ▼
+                        Kafka: logs-topic
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │  Log Ingestion       │
+                    │  Service             │
+                    │  :8082              │
+                    └──────────┬───────────┘
+                               │
+                               ▼
+                     Kafka: incident-topic
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │ Incident Detection   │
+                    │ Service              │
+                    │ :8080               │
+                    └──────────┬───────────┘
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │      Spring AI       │
+                    │      + Ollama        │
+                    │      Local LLM        │
+                    └──────────┬───────────┘
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │  AI Incident         │
+                    │  Analysis             │
+                    └──────────┬───────────┘
+                               │
+                               ▼
+                         H2 Database
