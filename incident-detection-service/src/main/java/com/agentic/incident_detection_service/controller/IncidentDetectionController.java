@@ -3,6 +3,7 @@ package com.agentic.incident_detection_service.controller;
 import com.agentic.incident_detection_service.model.LogEntry;
 import com.agentic.incident_detection_service.service.IncidentDetectionService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,26 +12,23 @@ import java.util.List;
 @RequestMapping("/incidents")
 public class IncidentDetectionController {
 
-    private final IncidentDetectionService incidentService;
+    private final IncidentDetectionService detectionService;
 
-    public IncidentDetectionController(IncidentDetectionService incidentService) {
-        this.incidentService = incidentService;
+    public IncidentDetectionController(IncidentDetectionService detectionService) {
+        this.detectionService = detectionService;
     }
 
-    @PostMapping("/detect")
-    public String detect(@RequestBody LogEntry log) {
-
+    @KafkaListener(topics = "incident-topic", groupId = "detection-group")
+    public void detect(LogEntry log) {
         System.out.println("🔥 DETECTION HIT!");
         System.out.println(log);
+        String result = detectionService.detectIncident(log);
 
-        String result = incidentService.detectIncident(log);
-
-        System.out.println(result);
-
-        return result;
+        System.out.println("🚨 " + result);
     }
+
     @GetMapping("/errors")
-    public List<LogEntry> getErrorLogs() {
-        return incidentService.getErrorLogs();
+    public Object getErrorLogs() {
+        return detectionService.getErrorLogs();
     }
 }

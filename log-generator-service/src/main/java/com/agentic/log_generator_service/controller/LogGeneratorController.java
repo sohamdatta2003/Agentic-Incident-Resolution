@@ -2,10 +2,8 @@ package com.agentic.log_generator_service.controller;
 
 import com.agentic.log_generator_service.model.LogEntry;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 
@@ -13,10 +11,10 @@ import java.time.Instant;
 @RequestMapping("/logs")
 public class LogGeneratorController {
 
-    private final RestTemplate restTemplate;
+    private final KafkaTemplate<String, LogEntry> kafkaTemplate;
 
-    public LogGeneratorController(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    public LogGeneratorController(KafkaTemplate<String, LogEntry> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @PostMapping("/generate")
@@ -29,12 +27,16 @@ public class LogGeneratorController {
                 Instant.now().toEpochMilli()
         );
 
-        // send this log to ingestion service
+        kafkaTemplate.send("logs-topic", log).whenComplete((result, ex) -> {
+            if (ex != null) {
+                System.out.println("❌ Kafka publish failed:");
+                ex.printStackTrace();
+            } else {
+                System.out.println("✅ Kafka publish successful: "
+                        + result.getRecordMetadata());
+            }
+        });
 
-        String ingestionUrl = "http://localhost:8082/logs";
-
-        restTemplate.postForObject(ingestionUrl, log, String.class);
-
-        return ResponseEntity.ok("Log generated and sent to ingestion service");
+        return ResponseEntity.ok("✅ Log published to Kafka");
     }
 }

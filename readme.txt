@@ -23,3 +23,17 @@ and uses agent-based reasoning (optionally AI-powered) to suggest fixes.
 - Spring Boot
 - REST APIs
 - File / in-memory storage (initial)
+
+##Final microservice flow now
+
+POST /logs/generate
+      ↓
+Kafka logs-topic
+      ↓
+LogIngestionController
+      ↓
+Kafka incident-topic
+      ↓
+IncidentDetectionController
+      ↓
+AI Analysis
