@@ -1,0 +1,30 @@
+Incident: Kafka Consumer Lag
+
+Category: KAFKA
+
+Symptoms:
+- Kafka consumer lag continuously increases
+- Messages remain unprocessed for an extended period
+- Processing latency increases
+
+Possible Root Causes:
+- Consumer application is slow
+- Consumer instances are unavailable
+- Insufficient consumer instances
+- Downstream service is slow
+- Kafka partition imbalance
+
+Recommended Investigation:
+1. Check consumer group lag.
+2. Check consumer application health.
+3. Check CPU and memory utilization.
+4. Check downstream service latency.
+5. Check Kafka partition distribution.
+
+Remediation:
+Restart an unhealthy consumer instance after confirming that
+another healthy consumer can continue processing the partition.
+
+Auto-Resolution:
+Only safe when the affected consumer instance is confirmed unhealthy
+and partition processing can continue safely.

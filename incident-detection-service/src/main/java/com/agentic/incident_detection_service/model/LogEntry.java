@@ -50,5 +50,9 @@ public class LogEntry {
         this.message = message;
     }
 
+    public long getTimestamp() {
+        return timestamp;
+    }
+
 
 }

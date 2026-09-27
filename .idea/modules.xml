@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Agentic-Incident-Resolution.iml" filepath="$PROJECT_DIR$/.idea/Agentic-Incident-Resolution.iml" />
-      <module fileurl="file://$PROJECT_DIR$/log-ingestion-service/log-ingestion-service.iml" filepath="$PROJECT_DIR$/log-ingestion-service/log-ingestion-service.iml" />
     </modules>
   </component>
 </project>

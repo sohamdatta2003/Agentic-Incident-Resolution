@@ -1,0 +1,28 @@
+Incident: Database Connection Timeout
+
+Category: DATABASE
+
+Symptoms:
+- Application logs show "Database connection timeout"
+- Database queries fail or take longer than the configured timeout
+- Users may experience failed requests
+
+Possible Root Causes:
+- Database server is unavailable
+- Database connection pool is exhausted
+- Network connectivity problems
+- Database is overloaded
+- Incorrect database configuration
+
+Recommended Investigation:
+1. Check whether the database server is reachable.
+2. Check active database connections.
+3. Check connection pool utilization.
+4. Check database CPU and memory usage.
+5. Review recent database errors.
+
+Remediation:
+If the connection pool is exhausted, restart the affected application service only after confirming that restarting it is safe.
+
+Auto-Resolution:
+Not automatically resolvable without verifying the database and connection-pool state.

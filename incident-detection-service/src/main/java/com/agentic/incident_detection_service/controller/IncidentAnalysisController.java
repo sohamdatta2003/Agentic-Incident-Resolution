@@ -1,5 +1,6 @@
 package com.agentic.incident_detection_service.controller;
 
+import com.agentic.incident_detection_service.model.IncidentAnalysis;
 import com.agentic.incident_detection_service.model.LogEntry;
 import com.agentic.incident_detection_service.service.AIAnalysisService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,7 @@ public class IncidentAnalysisController {
     }
 
     @PostMapping("/analyze")
-    public String analyze(@RequestBody LogEntry log) {
-        return aiService.analyze(log.getMessage());
+    public IncidentAnalysis analyze(@RequestBody LogEntry log) {
+        return aiService.analyze(log);
     }
 }
